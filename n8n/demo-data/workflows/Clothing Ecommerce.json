@@ -1,0 +1,158 @@
+{
+  "name": "Clothing Ecommerce",
+  "nodes": [
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "id": "ce8c3da4-899c-4cc4-af73-8096c64eec64",
+      "name": "Basic LLM Chain",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        928,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "id": "3dee878b-d748-4829-ac0a-cfd6705d31e5",
+      "name": "Ollama Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        928,
+        592
+      ],
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Upload",
+        "formDescription": "Choose File",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "File",
+              "fieldType": "file",
+              "multipleFiles": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        240,
+        400
+      ],
+      "id": "f9b38ac0-58d9-4f9d-a5b2-74f9b53229d6",
+      "name": "On form submission",
+      "webhookId": "c98871c0-5182-444c-b0be-bb85fefc65e2"
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nfor (const item of $input.all()) {\n  console.log(`Fashion Company Code: ${item.json[\"Fashion Company Code\"]}`)\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        400
+      ],
+      "id": "511ff68f-9650-4598-9477-0ffbee485088",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "binaryPropertyName": "File",
+        "options": {
+          "includeEmptyCells": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        448,
+        400
+      ],
+      "id": "a053296b-c843-40d8-8cb5-05d835f0130a",
+      "name": "Extract from File"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dc8ce240-0ea6-480b-847d-ee56c5ee303d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "558d88703fb65b2d0e44613bc35916258b0f0bf983c5d4730c00c424b77ca36a"
+  },
+  "id": "srOnR8PAY3u4RSwb",
+  "tags": [
+    {
+      "createdAt": "2025-09-14T00:22:36.821Z",
+      "updatedAt": "2025-09-14T00:22:36.821Z",
+      "id": "GOvReZ9YZuB4iLJT",
+      "name": "demo"
+    }
+  ]
+}
